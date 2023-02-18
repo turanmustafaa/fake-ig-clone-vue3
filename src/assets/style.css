@@ -5,3 +5,28 @@
 .globalmargin {
     margin: 0px 20px;
 }
+.inputFlex {
+    width: 100%;
+    position: relative;
+    height: 40px;
+ }
+
+.inputFlex input {
+    right: 0;
+    position: absolute;
+    transition: .3s ease all;
+    border: 1px solid pink;
+     font-size: 20px;
+     border-radius: 10px;
+ }
+ .inputFlex input:hover {
+    right: 100px;
+    position: absolute;
+ }
+
+ @media only screen and (max-width: 600px) {
+    .responsiveItems {
+       justify-content: center !important;
+    }
+
+}

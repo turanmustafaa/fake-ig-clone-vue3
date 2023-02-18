@@ -2,8 +2,10 @@
    <div>
       <AppHeader />
       <h2>Posts</h2>
-      <input v-model="inputData" type="text" placeholder="post'lar içinde arayınız....">
-      <div class="globalmargin d-flex flex-wrap">
+      <div class="d-flex inputFlex">
+         <input v-model="inputData" type="text" placeholder="post'lar içinde arayınız....">
+      </div>
+      <div class="globalmargin d-flex flex-wrap justify-content-between responsiveItems">
          <div v-for="item in PostsList" :key="item.id" class="card" style="width: 250px">
             <router-link to="/userdetail" @click="updateCurrentId(item.owner.id)" style="cursor: pointer;" class="card-header">
                <div class="img">
@@ -33,9 +35,9 @@
       </div>
       <nav class="d-flex justify-content-center">
          <ul class="pagination pagination-lg d-flex flex-wrap">
-            <button @click="paginationPrevFunc">prev</button>
+            <button class="btn btn-primary" @click="paginationPrevFunc">prev</button>
             <a v-for="i in perpaginationShow" :key="i" @click="addVal" class="page-link" href="#">{{ i }}</a>
-            <button @click="paginationNextFunc">next</button>
+            <button class="btn btn-primary" @click="paginationNextFunc">next</button>
          </ul>
       </nav>
 </div>
@@ -137,6 +139,7 @@ export default {
 .card .card-header {
    display: flex;
    align-items: center;
+   text-decoration: none;
 }
 
 .card .card-header .img {
@@ -192,4 +195,5 @@ export default {
 
 .card .card-footer .likes span {
    font-size: 12px;
-}</style>
+}
+</style>

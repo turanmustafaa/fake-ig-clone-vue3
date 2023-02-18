@@ -1,8 +1,10 @@
 <template>
   <AppHeader />
   <h2>Users</h2>
-  <input v-model="inputData" type="text" placeholder="user'lar içinde arayınız...">
-  <div class="d-flex flex-wrap globalmargin">
+  <div class="d-flex inputFlex">
+         <input v-model="inputData" type="text" placeholder="user'lar içinde arayınız....">
+      </div>
+  <div class="d-flex flex-wrap globalmargin justify-content-between responsiveItems">
     <div v-for="item in usersList" :key="item.id" class="card" style="width: 200px;">
       <router-link to="/userdetail" class="card-header" @click="updateCurrentId(item.id)">
         <img :src="item.picture" alt="">
