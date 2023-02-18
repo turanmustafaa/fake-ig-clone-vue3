@@ -2,8 +2,9 @@
    <div>
       <AppHeader />
       <h2>Posts</h2>
+      <input v-model="inputData" type="text" placeholder="post'lar içinde arayınız....">
       <div class="globalmargin d-flex flex-wrap">
-         <div v-for="item in posts" :key="item.id" class="card" style="width: 250px">
+         <div v-for="item in PostsList" :key="item.id" class="card" style="width: 250px">
             <router-link to="/userdetail" @click="updateCurrentId(item.owner.id)" style="cursor: pointer;" class="card-header">
                <div class="img">
                   <img :src="item.owner.picture" alt="">
@@ -32,7 +33,9 @@
       </div>
       <nav class="d-flex justify-content-center">
          <ul class="pagination pagination-lg d-flex flex-wrap">
-            <a v-for="i in paginationCount" :key="i" @click="addVal" class="page-link" href="#">{{ i }}</a>
+            <button @click="paginationPrevFunc">prev</button>
+            <a v-for="i in perpaginationShow" :key="i" @click="addVal" class="page-link" href="#">{{ i }}</a>
+            <button @click="paginationNextFunc">next</button>
          </ul>
       </nav>
 </div>
@@ -45,17 +48,41 @@ import axios from "axios"
 export default {
    data() {
       return {
+         inputData : "",
          posts: [],
          totalPost : 0,
          currentPage: 0,
          perPageLimit : 20,
-         paginationCount: null
+         paginationCount: null,
+         perpaginationShow :[1,2,3],
       };
    },
    mounted() {
       this.getData()
    },
    methods: {
+      paginationPrevFunc() {
+         if(this.perpaginationShow[0] !== 1){
+            for(let i = 0 ; i <this.perpaginationShow.length ; i++) {
+         this.perpaginationShow[i] = this.perpaginationShow[i] - 3
+            }
+         }
+         this.currentPage = this.perpaginationShow[0] -1
+         console.log(this.currentPage)
+         this.getData()
+      },
+
+      paginationNextFunc() {
+         if(this.perpaginationShow[2] !== this.paginationCount - 1){
+            console.log( this.perpaginationShow[2] , this.paginationCount - 1)
+            for(let i = 0 ; i <this.perpaginationShow.length ; i++) {
+         this.perpaginationShow[i] = this.perpaginationShow[i] + 3
+          }
+         }
+         this.currentPage = this.perpaginationShow[0] -1
+         console.log(this.currentPage)
+         this.getData()
+      },     
       getData() {
          axios.get(`https://dummyapi.io/data/v1/post?page=${this.currentPage}&limit=${this.perPageLimit}`, {
             headers: {
@@ -64,7 +91,11 @@ export default {
          }).then(res => {
             this.posts = res.data.data
             this.totalPost = res.data.total
+            console.log(res.data)
             this.paginationCount = Math.floor(this.totalPost / this.perPageLimit)
+            this.posts.forEach(post => {
+            post.fullName = post.owner.firstName + " " + post.owner.lastName;
+            })
          })
       },
       addVal(e) {
@@ -84,6 +115,15 @@ export default {
       }
    },
    components: { AppHeader },
+   computed : {
+    PostsList() {
+      if(this.inputData.trim().length > 0) {
+        return this.posts.filter((post) =>
+        post.fullName.toLowerCase().includes(this.inputData))
+      }
+      return this.posts
+    }
+   },
 }
 </script>
 
