@@ -1,8 +1,9 @@
 <template>
   <AppHeader />
   <h2>Users</h2>
+  <input v-model="inputData" type="text">
   <div class="d-flex flex-wrap globalmargin">
-    <div v-for="item in users" :key="item.id" class="card" style="width: 200px;">
+    <div v-for="item in usersList" :key="item.id" class="card" style="width: 200px;">
       <router-link to="/userdetail" class="card-header" @click="updateCurrentId(item.id)">
         <img :src="item.picture" alt="">
       </router-link>
@@ -25,6 +26,7 @@ import axios from "axios"
 export default {
   data() {
     return {
+      inputData : "",
       users: [],
       totalUser: 0,
       currentPage: 0,
@@ -41,6 +43,9 @@ export default {
       }).then(res => {
         console.log(res.data)
         this.users = res.data.data;
+        this.users.forEach(user => {
+          user.fullName = user.firstName + " " + user.lastName;
+        })
         this.totalUser = res.data.total
         this.paginationCount = Math.floor(this.totalUser / this.perPageLimit)
       });
@@ -63,6 +68,15 @@ export default {
             this.getData()
          }
       }
+   },
+   computed : {
+    usersList() {
+      if(this.inputData.trim().length > 0) {
+        return this.users.filter((user) =>
+        user.fullName.toLowerCase().includes(this.inputData))
+      }
+      return this.users
+    }
    },
   components: { 
     AppHeader 
